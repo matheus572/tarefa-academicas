@@ -1,0 +1,71 @@
+<%- include('partials/header', { tituloPagina: 'Lista de Tarefas' }) %>
+
+<section class="lista-tarefas">
+  <header class="secao-header">
+    <h2>Tarefas</h2>
+    <a href="/tarefas/nova" class="btn btn-primary">+ Nova Tarefa</a>
+  </header>
+
+  <!-- Filtro por status -->
+  <form class="filtro-form" method="GET" action="/tarefas">
+    <label for="status">Filtrar por status:</label>
+    <select name="status" id="status" onchange="this.form.submit()">
+      <option value="todas" <%= filtroAtivo === 'todas' ? 'selected' : '' %>>Todas</option>
+      <option value="pendente" <%= filtroAtivo === 'pendente' ? 'selected' : '' %>>Pendentes</option>
+      <option value="concluida" <%= filtroAtivo === 'concluida' ? 'selected' : '' %>>Concluídas</option>
+    </select>
+    <noscript><button type="submit">Aplicar</button></noscript>
+  </form>
+
+  <!-- Lista de tarefas -->
+  <% if (tarefas.length === 0) { %>
+    <p class="lista-vazia">
+      <% if (filtroAtivo === 'todas') { %>
+        Nenhuma tarefa cadastrada. <a href="/tarefas/nova">Crie a primeira tarefa</a>.
+      <% } else if (filtroAtivo === 'pendente') { %>
+        Nenhuma tarefa pendente. Ótimo trabalho! ☕
+      <% } else { %>
+        Nenhuma tarefa concluída ainda.
+      <% } %>
+    </p>
+  <% } else { %>
+    <table class="tabela-tarefas">
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Disciplina</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% tarefas.forEach(tarefa => { %>
+          <tr>
+            <td>
+              <a href="/tarefas/<%= tarefa.id %>"><%= tarefa.titulo %></a>
+            </td>
+            <td><%= tarefa.disciplina %></td>
+            <td>
+              <span class="status <%= tarefa.status %>">
+                <%= tarefa.status === 'pendente' ? '⏳ Pendente' : '✅ Concluída' %>
+              </span>
+            </td>
+            <td class="acoes">
+              <a href="/tarefas/<%= tarefa.id %>/editar" class="btn btn-sm">Editar</a>
+              <% if (tarefa.status === 'pendente') { %>
+                <form action="/tarefas/<%= tarefa.id %>/concluir?_method=PATCH" method="POST" style="display:inline" data-confirm="Marcar como concluída?">
+                  <button type="submit" class="btn btn-sm btn-success">Concluir</button>
+                </form>
+              <% } %>
+              <form action="/tarefas/<%= tarefa.id %>?_method=DELETE" method="POST" style="display:inline" data-confirm="Tem certeza que deseja excluir esta tarefa?">
+                <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</section>
+
+<%- include('partials/footer') %>

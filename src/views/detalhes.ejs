@@ -1,0 +1,44 @@
+<%- include('partials/header', { tituloPagina: tarefa.titulo }) %>
+
+<section class="detalhes-tarefa">
+  <header class="secao-header">
+    <h2><%= tarefa.titulo %></h2>
+    <div class="acoes">
+      <a href="/tarefas" class="btn">← Voltar</a>
+      <a href="/tarefas/<%= tarefa.id %>/editar" class="btn btn-primary">Editar</a>
+      <% if (tarefa.status === 'pendente') { %>
+        <form action="/tarefas/<%= tarefa.id %>/concluir?_method=PATCH" method="POST" style="display:inline" data-confirm="Marcar como concluída?">
+          <button type="submit" class="btn btn-success">Concluir</button>
+        </form>
+      <% } %>
+      <form action="/tarefas/<%= tarefa.id %>?_method=DELETE" method="POST" style="display:inline" data-confirm="Tem certeza que deseja excluir esta tarefa?">
+        <button type="submit" class="btn btn-danger">Excluir</button>
+      </form>
+    </div>
+  </header>
+
+  <!-- Mensagem se já estava concluída -->
+  <% if (typeof query !== 'undefined' && query.jaConcluida) { %>
+    <div class="alerta alerta-info">Esta tarefa já estava concluída.</div>
+  <% } %>
+
+  <dl class="detalhes-grid">
+    <dt>Disciplina</dt>
+    <dd><%= tarefa.disciplina %></dd>
+
+    <dt>Status</dt>
+    <dd>
+      <span class="status <%= tarefa.status %>">
+        <%= tarefa.status === 'pendente' ? '⏳ Pendente' : '✅ Concluída' %>
+      </span>
+    </dd>
+
+    <dt>Descrição</dt>
+    <dd class="descricao"><%= tarefa.descricao || '<em>Sem descrição</em>' %></dd>
+
+    <dt>ID</dt>
+    <dd><%= tarefa.id %></dd>
+  </dl>
+</section>
+
+<%- include('partials/footer') %>

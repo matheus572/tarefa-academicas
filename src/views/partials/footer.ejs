@@ -1,0 +1,19 @@
+</main>
+  <footer>
+    <div class="container">
+      <p>&copy; 2024 - Atividade Acadêmica - Gerenciador de Tarefas MVC</p>
+    </div>
+  </footer>
+  <script>
+    // Confirmação de exclusão via JavaScript
+    document.querySelectorAll('form[data-confirm]').forEach(form => {
+      form.addEventListener('submit', function(e) {
+        const mensagem = this.dataset.confirm || 'Tem certeza que deseja excluir?';
+        if (!confirm(mensagem)) {
+          e.preventDefault();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

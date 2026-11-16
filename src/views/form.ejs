@@ -1,0 +1,76 @@
+<%- include('partials/header', { tituloPagina: tituloPagina }) %>
+
+<section class="form-tarefa">
+  <h2><%= tituloPagina %></h2>
+
+  <% if (Object.keys(erros).length > 0) { %>
+    <div class="alerta alerta-erro">
+      <strong>Por favor, corrija os erros abaixo:</strong>
+      <ul>
+        <% Object.values(erros).forEach(erro => { %>
+          <li><%= erro %></li>
+        <% }) %>
+      </ul>
+    </div>
+  <% } %>
+
+  <form action="<%= acao %>" method="<%= metodo %>">
+    <div class="campo">
+      <label for="titulo">Título *</label>
+      <input
+        type="text"
+        id="titulo"
+        name="titulo"
+        value="<%= tarefa.titulo %>"
+        maxlength="100"
+        required
+        aria-describedby="titulo-ajuda"
+      >
+      <small id="titulo-ajuda">Mínimo 3, máximo 100 caracteres</small>
+      <% if (erros.titulo) { %>
+        <span class="erro-campo"><%= erros.titulo %></span>
+      <% } %>
+    </div>
+
+    <div class="campo">
+      <label for="disciplina">Disciplina *</label>
+      <input
+        type="text"
+        id="disciplina"
+        name="disciplina"
+        value="<%= tarefa.disciplina %>"
+        maxlength="80"
+        required
+        aria-describedby="disciplina-ajuda"
+      >
+      <small id="disciplina-ajuda">Mínimo 2, máximo 80 caracteres</small>
+      <% if (erros.disciplina) { %>
+        <span class="erro-campo"><%= erros.disciplina %></span>
+      <% } %>
+    </div>
+
+    <div class="campo">
+      <label for="descricao">Descrição</label>
+      <textarea
+        id="descricao"
+        name="descricao"
+        maxlength="500"
+        rows="4"
+        aria-describedby="descricao-ajuda"
+      ><%= tarefa.descricao %></textarea>
+      <small id="descricao-ajuda">Opcional, máximo 500 caracteres</small>
+      <% if (erros.descricao) { %>
+        <span class="erro-campo"><%= erros.descricao %></span>
+      <% } %>
+    </div>
+
+    <div class="form-acoes">
+      <button type="submit" class="btn btn-primary">
+        <%= tituloPagina.includes('Nova') ? 'Cadastrar' : 'Salvar Alterações' %>
+      </button>
+      <a href="/tarefas" class="btn">Cancelar</a>
+    </div>
+  </form>
+</section>
+
+<%- include('partials/footer') %>
